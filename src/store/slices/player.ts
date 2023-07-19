@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { useAppSelector } from "..";
 
 interface IPlayActionPayload {
   lessonIndex: number;
@@ -82,7 +83,7 @@ const playerSlice = createSlice({
         const nextModule = state.course.modules[nextModuleIndex];
 
         if (nextModule) {
-          state.currentLessonIndex = nextModuleIndex;
+          state.currentModuleIndex = nextModuleIndex;
           state.currentLessonIndex = 0;
         }
       }
@@ -92,3 +93,18 @@ const playerSlice = createSlice({
 
 export const player = playerSlice.reducer;
 export const { play, next } = playerSlice.actions;
+
+export const useCurrentLesson = () => {
+  return useAppSelector((state) => {
+    const { currentLessonIndex, currentModuleIndex } = state.player;
+
+    const currentLesson =
+      state.player.course.modules[currentModuleIndex].lessons[
+        currentLessonIndex
+      ];
+
+    const currentModule = state.player.course.modules[currentModuleIndex];
+
+    return { currentLesson, currentModule };
+  });
+};
