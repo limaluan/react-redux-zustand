@@ -18,6 +18,7 @@ export interface IPlayerState {
   currentModuleIndex: number;
   currentLessonIndex: number;
   course: ICourse | null;
+  isLoading: boolean;
 }
 
 interface IPlayActionPayload {
@@ -29,6 +30,7 @@ const initialState: IPlayerState = {
   course: null,
   currentLessonIndex: 0,
   currentModuleIndex: 0,
+  isLoading: true,
 };
 
 export const loadCourse = createAsyncThunk("player/load", async () => {
@@ -69,6 +71,7 @@ const playerSlice = createSlice({
     builder.addCase(
       loadCourse.fulfilled,
       (state, action: PayloadAction<ICourse>) => {
+        state.isLoading = false;
         state.course = action.payload;
       }
     );
